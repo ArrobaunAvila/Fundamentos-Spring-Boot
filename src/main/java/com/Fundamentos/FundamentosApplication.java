@@ -18,7 +18,7 @@ public class FundamentosApplication implements CommandLineRunner {
 	 */
 	
     @Autowired
-    @Qualifier("componentTwoImplement")
+    @Qualifier("componentImplement")
 	private ComponentDependency componentDependency;
     
     private MyBean myBean;
