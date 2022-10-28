@@ -6,8 +6,6 @@ import javax.persistence.*;
 @Entity
 @Table(name = "post")
 @AllArgsConstructor
-@Getter
-@Setter
 @ToString
 @Builder
 public class Post {

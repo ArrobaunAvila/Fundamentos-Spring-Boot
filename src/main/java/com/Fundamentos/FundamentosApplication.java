@@ -113,6 +113,18 @@ public class FundamentosApplication implements CommandLineRunner {
         userRepository.findByBirthdayBetween(LocalDate.of(2021, 03, 1), LocalDate.of(2021, 03 , 20))
 				.stream()
 				.forEach(user -> LOGGER.info("Usuario con intervalo de fechas-->" + user));
+
+
+		userRepository.findByNameLikeOrderByIdDesc("%Maria%")
+				.stream().forEach(user -> LOGGER.info("Usuario encontrado con like y ordenado" + user));
+
+		userRepository.findByNameContainingOrderByIdAsc("ilo")
+				.stream().forEach(user -> LOGGER.info("Usuario encontrado con Containing y ordenado" + user));
+      /*
+        LOGGER.info("El Usuario a partir de method namedParameters --> getAllByBirthdayAndEmail "
+				+ userRepository.getAllByBirthdayAndEmail(LocalDate.now() , "fabioGalvan@hotmail.com")
+				.orElseThrow(() -> new  RuntimeException("Usuario No encontrado") ));
+        */
 	}
 
 	private void saveUsersInDatabase(){
@@ -141,7 +153,12 @@ public class FundamentosApplication implements CommandLineRunner {
 			        	.email("elpibemariano@gmail.com")
 				        .address("Calle A# 45D")
 						.birthday(LocalDate.of(2021, 03, 20))
-				        .build());
+				        .build(),User.builder()
+						.name("Maria")
+						.email("maria18_1997@gmail.com")
+				        .address("Calle Salamanca 45")
+						.birthday(LocalDate.of(2021, 03, 30))
+						.build());
 		list.stream().forEach(userRepository::save);
 
 	}
