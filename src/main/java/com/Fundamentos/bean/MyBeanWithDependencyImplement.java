@@ -6,7 +6,7 @@ public class MyBeanWithDependencyImplement implements MyBeanWithDependency {
 
 	private MyOperation myOperation;
 	
-    LinkedList<String> datos_basicos = new LinkedList<>();
+    LinkedList<Integer> datos_basicos = new LinkedList<>();
     
     public MyBeanWithDependencyImplement(MyOperation myOperation) {
     	this.myOperation = myOperation;

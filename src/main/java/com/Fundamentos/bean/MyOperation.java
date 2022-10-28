@@ -4,5 +4,5 @@ import java.util.LinkedList;
 
 public interface MyOperation {
 
-	void getDatosBasicos(LinkedList<String> datosBasicos);
+	void getDatosBasicos(LinkedList<Integer> datosBasicos);
 }
