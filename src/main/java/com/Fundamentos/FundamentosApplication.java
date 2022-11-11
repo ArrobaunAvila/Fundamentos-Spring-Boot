@@ -5,6 +5,7 @@ import com.Fundamentos.bean.MyOperation;
 import com.Fundamentos.entity.User;
 import com.Fundamentos.pojo.UserPojo;
 import com.Fundamentos.repository.UserRepository;
+import com.Fundamentos.service.UserService;
 import org.apache.juli.logging.Log;
 import org.apache.juli.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,13 +17,20 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import com.Fundamentos.bean.MyBean;
 import com.Fundamentos.bean.MyBeanWithDependency;
 import com.Fundamentos.component.ComponentDependency;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.logging.Logger;
 
 @SpringBootApplication
+//@ComponentScan({"com.server", "com.server.config"})
+//@EntityScan(basePackages = {"com.Fundamentos.*"})
+//@EnableJpaRepositories(basePackages = {"com.Fundamentos.*"})
 public class FundamentosApplication implements CommandLineRunner {
 	
 	/*Haciendo inyeccion de dependencias con @Autowired
@@ -41,6 +49,8 @@ public class FundamentosApplication implements CommandLineRunner {
 
 	private UserRepository userRepository;
 
+	private UserService userService;
+
 	@Autowired
 	private MyOperation myOperation;
     
@@ -50,11 +60,12 @@ public class FundamentosApplication implements CommandLineRunner {
     }
 	*/
     
-    public FundamentosApplication(MyBean myBean, MyBeanWithDependency myBeanWithDependency, UserPojo userPojo, UserRepository userRepository) {
+    public FundamentosApplication(MyBean myBean, MyBeanWithDependency myBeanWithDependency, UserPojo userPojo, UserRepository userRepository, UserService userService) {
     	this.myBean = myBean;
     	this.myBeanWithDependency = myBeanWithDependency;
 		this.userPojo = userPojo;
 		this.userRepository = userRepository;
+		this.userService = userService;
     }
     
 	public static void main(String[] args) {
@@ -86,7 +97,36 @@ public class FundamentosApplication implements CommandLineRunner {
 		}
 	}
 
+   private void saveWithErrorTransactional() {
+		   	List<User> users = 	List.of( User.builder()
+				.name("Marcos")
+				.email("marcos_mira@hotmail.com")
+				.address("Calle zamora 34U")
+				.birthday(LocalDate.of(2022,10,15))
+				.build(),User.builder()
+				.name("Malle")
+				.email("MalleFreyle@gmail.com")
+				.address("Cra 12 #45A")
+				.birthday(LocalDate.of(2022,10,15))
+				.build(),User.builder()
+				.name("Margot")
+				.email("MalleFreyle@gmail.com")
+				.address("Calle 56#45")
+				.birthday(LocalDate.of(2022,10,15))
+				.build());
 
+       try {
+         userService.saveTransactional(users);
+
+	   }catch (Exception e) {
+        LOGGER.error("Esta es  una excepcion dentro del metodo transactional" + e);
+	   }
+
+	 userService.getAllUsers()
+			 //.forEach(System.out::println);
+			 .forEach(user -> LOGGER.info("|"+ user.getName() + "|"+ user.getEmail() +"|"+ user.getBirthday()+"|"));
+
+   }
 	private void getInformacionJpqlFromUserByEmail (){
          LOGGER.info("El usuario User with metodo findbyUserEmail" + userRepository.findByUserEmail("molinoDanilo@gmail.com")
 				 .orElseThrow( () -> new RuntimeException("No se encontro el usuario")));
@@ -167,9 +207,10 @@ public class FundamentosApplication implements CommandLineRunner {
 	public void run(String... args) throws Exception {
 		// TODO Auto-generated method stub
 		//executeExamplesInjectionDependences();
+		//saveUsersInDatabase();
+		//getInformacionJpqlFromUserByEmail();
+        saveWithErrorTransactional();
 		saveUsersInDatabase();
-		getInformacionJpqlFromUserByEmail();
-
 	}
 
 }
