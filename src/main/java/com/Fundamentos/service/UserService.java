@@ -30,16 +30,38 @@ public class UserService {
 
     //@Transactional
     public void saveTransactional(List<User> users) {
-       users.stream()
-               .peek(user -> LOG.info("Usuario Insertado: " + user))
-               .forEach(userRepository::save);
+        users.stream()
+                .peek(user -> LOG.info("Usuario Insertado: " + user))
+                .forEach(userRepository::save);
     }
 
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
 
-    public Optional<User> getUserById(Long id){
-      return userRepository.findById(id);
+    public Optional<User> getUserById(Long id) {
+        return userRepository.findById(id);
     }
+
+    public User save(User user) {
+        return userRepository.save(user);
+    }
+
+    public void deleteUser(Long id) {
+        userRepository.delete(new User(id));
+    }
+
+    public User updateUser(User user, Long id) {
+        return userRepository.findById(id)
+                .map(user -> {
+                            user.setName(user.getName());
+                            user.setBirthday(user.getBirthday());
+                            user.setEmail(user.getEmail());
+                            user.setAddress(user.getAddress());
+                            return userRepository.save(user);
+                        }
+                );
+
+    }
+
 }

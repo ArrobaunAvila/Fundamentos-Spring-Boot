@@ -41,5 +41,9 @@ public class User {
     private List<Post> post = new ArrayList<>();
 
 
+    public User(Long id) {
+        this.id = id;
+    }
+
 
 }

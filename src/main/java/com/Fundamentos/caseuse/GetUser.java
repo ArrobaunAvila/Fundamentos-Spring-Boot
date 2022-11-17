@@ -12,4 +12,10 @@ public interface GetUser {
     List<User> getAll();
 
     Optional<User> getUserById(Long id);
+
+    User saveUser(User user);
+
+    void remove(Long id);
+
+    User updateUser(User user, Long id);
 }

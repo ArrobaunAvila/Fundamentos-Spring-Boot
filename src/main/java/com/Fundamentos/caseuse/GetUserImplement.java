@@ -26,5 +26,20 @@ public class GetUserImplement implements GetUser{
 
     }
 
+    @Override
+    public User saveUser(User user) {
+        return userService.save(user);
+    }
+
+    @Override
+    public void remove(Long id) {
+      userService.deleteUser(id);
+    }
+
+    @Override
+    public User updateUser(User user, Long id) {
+        userService.updateUser(user, id);
+    }
+
 
 }
